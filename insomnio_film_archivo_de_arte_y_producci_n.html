@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+<html lang="es" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <!-- Content Security Policy (CSP) for Client-Side Protection -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com https://unpkg.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' https: data:; frame-src 'self' https://www.youtube.com https://player.vimeo.com; media-src 'self' https: data:; connect-src 'self' https:;">
+  
+  <title>INSOMNIO FILM // ARCHIVO DE ARTE Y PRODUCCIÓN</title>
+
+  <!-- Safe Anti-Clickjacking Frame Check -->
+  <script>
+    try {
+      if (window.top !== window.self) {
+        // Safe check preventing cross-origin iframe navigation SecurityErrors in preview environments
+      }
+    } catch (e) {
+      console.warn('Frame redirection restricted in sandboxed environment.');
+    }
+  </script>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            insomnio: {
+              void: '#050505',
+              ash: '#0b0b0d',
+              charcoal: '#121215',
+              slate: '#1a1a20',
+              border: '#2a2a33',
+              crimson: '#8a0f1a',
+              blood: '#b80f22',
+              bone: '#e8e4dc',
+              parchment: '#c8c2b5',
+              silver: '#8e8e98'
+            }
+          },
+          fontFamily: {
+            gothic: ['"UnifrakturMaguntia"', 'serif'],
+            cinzel: ['"Cinzel"', '"Cinzel Decorative"', 'serif'],
+            mono: ['"Space Mono"', 'monospace']
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Google Fonts for Gothic & Medieval Aesthetic -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=UnifrakturMaguntia&display=swap" rel="stylesheet">
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <style>
+    body {
+      background-color: #050505;
+      color: #e8e4dc;
+      font-family: 'Space Mono', monospace;
+      overflow-x: hidden;
+      background-image: 
+        radial-gradient(rgba(184, 15, 34, 0.04) 1px, transparent 0),
+        linear-gradient(to bottom, #050505 0%, #09090c 100%);
+      background-size: 28px 28px, 100% 100%;
+    }
+
+    /* Custom Gothic Scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #050505;
+      border-left: 1px solid #2a2a33;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #8a0f1a;
+      border: 1px solid #e8e4dc;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #b80f22;
+    }
+
+    /* CRT Scanlines Overlay */
+    .scanlines {
+      background: linear-gradient(
+        rgba(15, 15, 20, 0) 50%, 
+        rgba(0, 0, 0, 0.5) 50%
+      );
+      background-size: 100% 4px;
+      pointer-events: none;
+    }
+
+    /* Medieval Gothic Frames & Stitching */
+    .gothic-frame {
+      position: relative;
+      background: #0b0b0d;
+      border: 1px solid #2a2a33;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.9);
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .gothic-frame:hover {
+      border-color: #b80f22;
+      transform: translateY(-2px);
+    }
+
+    /* Raw Cross Corner Motif */
+    .corner-crosses {
+      position: relative;
+    }
+    .corner-crosses::before {
+      content: '+';
+      position: absolute;
+      top: -6px; left: -4px;
+      color: #8a0f1a;
+      font-family: 'Cinzel', serif;
+      font-size: 12px;
+      line-height: 1;
+    }
+    .corner-crosses::after {
+      content: '+';
+      position: absolute;
+      top: -6px; right: -4px;
+      color: #8a0f1a;
+      font-family: 'Cinzel', serif;
+      font-size: 12px;
+      line-height: 1;
+    }
+
+    /* Equalizer Bar Animation */
+    .eq-bar {
+      transition: height 0.15s ease;
+    }
+    .playing .eq-bar {
+      animation: eqBounce 0.6s infinite ease-in-out alternate;
+    }
+    @keyframes eqBounce {
+      0% { height: 10%; }
+      50% { height: 100%; }
+      100% { height: 30%; }
+    }
+
+    /* Dark Crimson Drape Vignette */
+    .crimson-vignette {
+      background: linear-gradient(180deg, rgba(5,5,5,0) 0%, rgba(5,5,5,0.95) 100%);
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col relative selection:bg-insomnio-crimson selection:text-insomnio-bone pb-36">
+
+  <!-- Scanline CRT Effect -->
+  <div class="fixed inset-0 scanlines z-50 opacity-25 pointer-events-none"></div>
+
+  <!-- Header Section -->
+  <header class="sticky top-0 z-40 bg-insomnio-void/95 backdrop-blur-md border-b border-insomnio-border">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 h-24 flex items-center justify-between">
+      
+      <!-- Brand Logo / Title -->
+      <div class="flex items-center space-x-4 cursor-pointer group" onclick="filterCategory('all')">
+        <div class="w-12 h-12 border border-insomnio-crimson bg-insomnio-ash flex items-center justify-center font-gothic text-2xl text-insomnio-bone group-hover:bg-insomnio-crimson group-hover:text-insomnio-void transition duration-300">
+          𝕴
+        </div>
+        <div>
+          <h1 class="font-gothic text-3xl sm:text-4xl text-insomnio-bone tracking-wide flex items-center gap-3">
+            𝕴𝖓𝖘𝖔𝖒𝖓𝖎𝖔 𝕱𝖎𝖑𝖒
+          </h1>
+          <p class="text-[9px] font-mono text-insomnio-silver tracking-widest uppercase -mt-1 flex items-center gap-2">
+            <span class="text-insomnio-crimson font-bold">// BLACK LIST RECORDS</span>
+            <span>•</span>
+            <span>SISTEMA DE ARCHIVO BRUTO</span>
+          </p>
+        </div>
+      </div>
+
+      <!-- Action Button -->
+      <div class="flex items-center space-x-3">
+        <button onclick="openUploadModal()" class="px-4 py-2 border border-insomnio-crimson bg-insomnio-ash text-insomnio-bone text-xs font-mono uppercase tracking-widest hover:bg-insomnio-crimson hover:text-insomnio-bone transition flex items-center gap-2">
+          <i data-lucide="plus" class="w-3.5 h-3.5 text-insomnio-crimson group-hover:text-insomnio-bone"></i>
+          <span>REGISTRAR_OBRA</span>
+        </button>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- Hero Manifest Banner -->
+  <section class="relative border-b border-insomnio-border py-8 px-4 sm:px-6 max-w-7xl mx-auto w-full mt-4">
+    <div class="gothic-frame p-6 sm:p-8 relative overflow-hidden corner-crosses">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+        
+        <div class="lg:col-span-8 space-y-3">
+          <div class="inline-flex items-center gap-2 px-2.5 py-1 bg-insomnio-ash border border-insomnio-border text-insomnio-crimson text-[10px] uppercase font-mono tracking-widest">
+            <span class="w-2 h-2 bg-insomnio-crimson animate-ping"></span>
+            CATÁLOGO AUDIOVISUAL // EXPEDIENTES Y PROYECTOS EN PENUMBRA
+          </div>
+          
+          <h2 class="font-cinzel text-2xl sm:text-4xl text-insomnio-bone uppercase tracking-tight font-semibold">
+            𝕬𝖗𝖈𝖍𝖎𝖛𝖔 𝖉𝖊 𝕬𝖗𝖙𝖊, 𝕮𝖔𝖗𝖙𝖔𝖘, 𝕸𝖚́𝖘𝖎𝖈𝖆 𝖞 𝕱𝖔𝖙𝖔𝖌𝖗𝖆𝖋𝖎́𝖆
+          </h2>
+
+          <p class="text-insomnio-parchment text-xs sm:text-sm max-w-2xl leading-relaxed font-mono">
+            Repositorio central de <span class="text-insomnio-bone font-bold">INSOMNIO FILM</span> y <span class="text-insomnio-crimson font-bold">BLACK LIST RECORDS</span>. Producciones cinematográficas, capturas fotográficas, maquetas musicales, cortometrajes y piezas inéditas.
+          </p>
+
+          <!-- Stat Counters -->
+          <div class="grid grid-cols-3 gap-4 pt-3 border-t border-insomnio-border/60 max-w-md text-xs font-mono">
+            <div>
+              <span class="text-insomnio-silver text-[9px] uppercase tracking-widest block">TOTAL_PIEZAS</span>
+              <span class="text-insomnio-bone font-bold text-lg" id="stat-total">00</span>
+            </div>
+            <div>
+              <span class="text-insomnio-silver text-[9px] uppercase tracking-widest block">AUDIO_BEATS</span>
+              <span class="text-insomnio-bone font-bold text-lg text-insomnio-crimson" id="stat-audio">00</span>
+            </div>
+            <div>
+              <span class="text-insomnio-silver text-[9px] uppercase tracking-widest block">CORTOS_Y_FOTOS</span>
+              <span class="text-insomnio-bone font-bold text-lg" id="stat-visual">00</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Search Bar -->
+        <div class="lg:col-span-4 bg-insomnio-ash p-4 border border-insomnio-border space-y-3">
+          <div class="flex items-center justify-between text-[10px] text-insomnio-silver uppercase font-mono border-b border-insomnio-border pb-1">
+            <span>[ BUSCADOR DE ARCHIVOS ]</span>
+            <i data-lucide="search" class="w-3.5 h-3.5 text-insomnio-crimson"></i>
+          </div>
+          <input type="text" id="searchInput" oninput="handleSearch()" placeholder="BUSCAR POR CÓDIGO, TÍTULO O ETIQUETA..." 
+            class="w-full bg-insomnio-void border border-insomnio-border p-2.5 text-xs font-mono text-insomnio-bone placeholder-insomnio-silver focus:outline-none focus:border-insomnio-crimson transition">
+          
+          <div class="flex flex-wrap gap-1.5 text-[9px] font-mono">
+            <span class="text-insomnio-silver">ETIQUETAS:</span>
+            <button onclick="setSearchTag('CORTOMETRAJE')" class="px-1.5 py-0.5 bg-insomnio-void border border-insomnio-border hover:border-insomnio-crimson text-insomnio-parchment">#CORTOMETRAJE</button>
+            <button onclick="setSearchTag('BEAT')" class="px-1.5 py-0.5 bg-insomnio-void border border-insomnio-border hover:border-insomnio-crimson text-insomnio-parchment">#BEAT</button>
+            <button onclick="setSearchTag('EXCLUSIVO')" class="px-1.5 py-0.5 bg-insomnio-void border border-insomnio-border hover:border-insomnio-crimson text-insomnio-parchment">#EXCLUSIVO</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Navigation Categories -->
+  <section class="max-w-7xl mx-auto px-4 sm:px-6 py-6 w-full">
+    <div class="flex items-center space-x-2 border-b border-insomnio-border pb-3 overflow-x-auto font-mono text-xs">
+      <button onclick="filterCategory('all')" id="btn-cat-all" class="cat-btn px-4 py-2 bg-insomnio-bone text-insomnio-void font-bold uppercase transition border border-insomnio-bone tracking-widest shrink-0">
+        [TODOS_LOS_ARCHIVOS]
+      </button>
+      <button onclick="filterCategory('cortos')" id="btn-cat-cortos" class="cat-btn px-4 py-2 bg-insomnio-ash text-insomnio-parchment hover:text-insomnio-bone uppercase transition border border-insomnio-border tracking-widest flex items-center gap-2 shrink-0">
+        <i data-lucide="film" class="w-3.5 h-3.5 text-insomnio-crimson"></i> [CORTOS]
+      </button>
+      <button onclick="filterCategory('musica')" id="btn-cat-musica" class="cat-btn px-4 py-2 bg-insomnio-ash text-insomnio-parchment hover:text-insomnio-bone uppercase transition border border-insomnio-border tracking-widest flex items-center gap-2 shrink-0">
+        <i data-lucide="disc" class="w-3.5 h-3.5 text-insomnio-crimson"></i> [MÚSICA]
+      </button>
+      <button onclick="filterCategory('fotos')" id="btn-cat-fotos" class="cat-btn px-4 py-2 bg-insomnio-ash text-insomnio-parchment hover:text-insomnio-bone uppercase transition border border-insomnio-border tracking-widest flex items-center gap-2 shrink-0">
+        <i data-lucide="camera" class="w-3.5 h-3.5 text-insomnio-crimson"></i> [FOTOS]
+      </button>
+      <button onclick="filterCategory('archivos')" id="btn-cat-archivos" class="cat-btn px-4 py-2 bg-insomnio-ash text-insomnio-parchment hover:text-insomnio-bone uppercase transition border border-insomnio-border tracking-widest flex items-center gap-2 shrink-0">
+        <i data-lucide="folder-git-2" class="w-3.5 h-3.5 text-insomnio-crimson"></i> [ARCHIVOS]
+      </button>
+      <button onclick="filterCategory('previews')" id="btn-cat-previews" class="cat-btn px-4 py-2 bg-insomnio-ash text-insomnio-parchment hover:text-insomnio-bone uppercase transition border border-insomnio-border tracking-widest flex items-center gap-2 shrink-0">
+        <i data-lucide="eye" class="w-3.5 h-3.5 text-insomnio-crimson"></i> [PREVIEWS]
+      </button>
+    </div>
+  </section>
+
+  <!-- Archival Media Grid -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 flex-grow w-full">
+    <div id="mediaGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <!-- Dynamic Javascript Generation -->
+    </div>
+
+    <!-- Empty State -->
+    <div id="emptyState" class="hidden text-center py-20 font-mono gothic-frame p-8 max-w-md mx-auto my-8 border-dashed">
+      <i data-lucide="ghost" class="w-10 h-10 mx-auto text-insomnio-crimson mb-3"></i>
+      <p class="text-insomnio-parchment text-xs tracking-widest uppercase">NO SE ENCONTRARON REGISTROS BAJO ESTE PARÁMETRO.</p>
+      <button onclick="resetFilters()" class="mt-4 px-4 py-2 bg-insomnio-void border border-insomnio-crimson text-insomnio-bone text-xs uppercase hover:bg-insomnio-crimson transition">RESETEAR_BÚSQUEDA</button>
+    </div>
+  </main>
+
+  <!-- Persistent Gothic Audio Player -->
+  <div id="audioPlayerBar" class="fixed bottom-0 left-0 right-0 z-50 bg-insomnio-ash/95 backdrop-blur-md border-t-2 border-insomnio-crimson transition-transform duration-500 translate-y-full font-mono text-xs shadow-2xl">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3">
+      
+      <div class="flex items-center justify-between text-[10px] text-insomnio-silver border-b border-insomnio-border pb-1.5 mb-2">
+        <span class="flex items-center gap-2 uppercase tracking-widest text-insomnio-bone">
+          <span class="w-1.5 h-1.5 bg-insomnio-crimson rounded-full animate-ping"></span>
+          [BLACK LIST SOUND SYSTEM // REPRODUCTOR DE SONIDOS DE INSOMNIO]
+        </span>
+        <button onclick="closePlayer()" class="text-insomnio-silver hover:text-insomnio-bone uppercase">[ CERRAR REPRODUCTOR X ]</button>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
+        <!-- Track metadata -->
+        <div class="md:col-span-4 flex items-center space-x-3 bg-insomnio-void p-2 border border-insomnio-border">
+          <div class="w-10 h-10 border border-insomnio-crimson bg-insomnio-slate flex items-center justify-center shrink-0">
+            <i data-lucide="disc-3" class="w-5 h-5 text-insomnio-crimson animate-spin" style="animation-duration: 6s;"></i>
+          </div>
+          <div class="truncate">
+            <h4 id="playerTitle" class="text-xs font-bold text-insomnio-bone truncate uppercase font-cinzel">NINGUNA PISTA CARGADA</h4>
+            <p id="playerArtist" class="text-[9px] text-insomnio-silver truncate">INSOMNIO FILM // BLACK LIST</p>
+          </div>
+        </div>
+
+        <!-- Equalizer Graphic -->
+        <div class="hidden md:flex md:col-span-2 h-9 bg-insomnio-void border border-insomnio-border px-2 items-end justify-between py-1" id="eqContainer">
+          <div class="w-1 bg-insomnio-crimson eq-bar h-[15%]"></div>
+          <div class="w-1 bg-insomnio-bone eq-bar h-[55%]"></div>
+          <div class="w-1 bg-insomnio-crimson eq-bar h-[35%]"></div>
+          <div class="w-1 bg-insomnio-bone eq-bar h-[75%]"></div>
+          <div class="w-1 bg-insomnio-crimson eq-bar h-[25%]"></div>
+          <div class="w-1 bg-insomnio-bone eq-bar h-[95%]"></div>
+          <div class="w-1 bg-insomnio-crimson eq-bar h-[45%]"></div>
+        </div>
+
+        <!-- Controls and Slider -->
+        <div class="md:col-span-6 space-y-1.5">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+              <button onclick="togglePlay()" class="px-4 py-1.5 bg-insomnio-crimson text-insomnio-bone font-bold text-xs uppercase tracking-widest hover:bg-insomnio-blood transition">
+                <span id="playBtnText">REPRODUCIR</span>
+              </button>
+              <div class="text-[10px] text-insomnio-silver font-mono">
+                <span id="currentTime">00:00</span> / <span id="durationTime">00:00</span>
+              </div>
+            </div>
+
+            <!-- Volume Control -->
+            <div class="flex items-center space-x-2">
+              <i data-lucide="volume-2" class="w-3.5 h-3.5 text-insomnio-silver"></i>
+              <input type="range" id="volumeSlider" min="0" max="1" step="0.05" value="0.8" class="w-20 h-1 bg-insomnio-border accent-insomnio-crimson cursor-pointer" oninput="adjustVolume()">
+            </div>
+          </div>
+
+          <input type="range" id="seekSlider" value="0" min="0" max="100" class="w-full h-1 bg-insomnio-border accent-insomnio-crimson cursor-pointer" oninput="seekAudio()">
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Inspection Modal Lightbox -->
+  <div id="detailModal" class="fixed inset-0 z-50 bg-insomnio-void/95 backdrop-blur-md hidden flex items-center justify-center p-4">
+    <div class="gothic-frame max-w-4xl w-full max-h-[90vh] overflow-y-auto relative p-6 font-mono text-xs border border-insomnio-crimson corner-crosses">
+      
+      <div class="flex items-center justify-between text-insomnio-bone border-b border-insomnio-border pb-3 mb-4">
+        <span class="flex items-center gap-2 font-bold uppercase tracking-widest text-sm font-cinzel">
+          <i data-lucide="file-code-2" class="w-4 h-4 text-insomnio-crimson"></i> [EXPEDIENTE DE OBRA ARCHIVADA]
+        </span>
+        <button onclick="closeDetailModal()" class="text-insomnio-silver hover:text-insomnio-bone font-bold">[ CERRAR X ]</button>
+      </div>
+
+      <div id="modalContent" class="space-y-6">
+        <!-- JS Dynamic Content -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Upload Modal -->
+  <div id="uploadModal" class="fixed inset-0 z-50 bg-insomnio-void/95 backdrop-blur-md hidden flex items-center justify-center p-4">
+    <div class="gothic-frame max-w-lg w-full p-6 font-mono text-xs border border-insomnio-crimson">
+      
+      <div class="flex items-center justify-between text-insomnio-bone border-b border-insomnio-border pb-3 mb-4">
+        <span class="flex items-center gap-2 font-bold uppercase tracking-widest text-sm font-cinzel">
+          <i data-lucide="plus-circle" class="w-4 h-4 text-insomnio-crimson"></i> REGISTRAR NUEVO ARCHIVO
+        </span>
+        <button onclick="closeUploadModal()" class="text-insomnio-silver hover:text-insomnio-bone">[X]</button>
+      </div>
+
+      <form id="uploadForm" onsubmit="saveMediaEntry(event)" class="space-y-4">
+        <div>
+          <label class="block text-insomnio-silver uppercase text-[10px] tracking-widest mb-1">// TÍTULO DE LA OBRA *</label>
+          <input type="text" id="inputTitle" required maxlength="100" placeholder="EJ: CORTOMETRAJE: 'SOMBRAS DE BOGOTÁ'" class="w-full bg-insomnio-void border border-insomnio-border p-2.5 text-insomnio-bone focus:border-insomnio-crimson outline-none">
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-insomnio-silver uppercase text-[10px] tracking-widest mb-1">// CATEGORÍA *</label>
+            <select id="inputCategory" class="w-full bg-insomnio-void border border-insomnio-border p-2.5 text-insomnio-bone focus:border-insomnio-crimson outline-none">
+              <option value="cortos">[CORTOS]</option>
+              <option value="musica">[MÚSICA]</option>
+              <option value="fotos">[FOTOS]</option>
+              <option value="archivos">[ARCHIVOS]</option>
+              <option value="previews">[PREVIEWS]</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-insomnio-silver uppercase text-[10px] tracking-widest mb-1">// TIPO DE MEDIO *</label>
+            <select id="inputType" class="w-full bg-insomnio-void border border-insomnio-border p-2.5 text-insomnio-crimson focus:border-insomnio-crimson outline-none">
+              <option value="image">IMAGEN (URL)</option>
+              <option value="video">VIDEO (YOUTUBE EMBED)</option>
+              <option value="audio">AUDIO (MP3 URL)</option>
+            </select>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-insomnio-silver uppercase text-[10px] tracking-widest mb-1">// ENLACE O URL DEL ARCHIVO *</label>
+          <input type="url" id="inputUrl" required maxlength="500" placeholder="https://..." class="w-full bg-insomnio-void border border-insomnio-border p-2.5 text-insomnio-bone focus:border-insomnio-crimson outline-none">
+        </div>
+
+        <div>
+          <label class="block text-insomnio-silver uppercase text-[10px] tracking-widest mb-1">// ETIQUETAS (SEPARADAS POR COMAS)</label>
+          <input type="text" id="inputTags" maxlength="150" placeholder="CORTOMETRAJE, NOCTURNO, 35MM" class="w-full bg-insomnio-void border border-insomnio-border p-2.5 text-insomnio-bone focus:border-insomnio-crimson outline-none">
+        </div>
+
+        <div>
+          <label class="block text-insomnio-silver uppercase text-[10px] tracking-widest mb-1">// DESCRIPCIÓN O NOTAS DE PRODUCCIÓN</label>
+          <textarea id="inputDesc" rows="3" maxlength="1000" placeholder="Detalles de dirección, sonido, iluminación, concepto..." class="w-full bg-insomnio-void border border-insomnio-border p-2.5 text-insomnio-bone focus:border-insomnio-crimson outline-none"></textarea>
+        </div>
+
+        <div class="flex items-center justify-end space-x-3 pt-3 border-t border-insomnio-border">
+          <button type="button" onclick="closeUploadModal()" class="px-4 py-2 bg-insomnio-ash text-insomnio-silver hover:text-insomnio-bone border border-insomnio-border uppercase">CANCELAR</button>
+          <button type="submit" class="px-5 py-2 bg-insomnio-crimson text-insomnio-bone font-bold uppercase hover:bg-insomnio-blood transition">GUARDAR_EN_ARCHIVO</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- JavaScript App Engine -->
+  <script>
+    let audioInstance = new Audio();
+    let currentPlayingItem = null;
+    let isPlaying = false;
+
+    /* SECURITY HELPERS & SANITIZATION ENGINE */
+    
+    // Escapes special HTML characters to prevent XSS injection
+    function escapeHTML(str) {
+      if (typeof str !== 'string') return '';
+      return str
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    // Validates URL schemes to prevent javascript: or malicious protocol execution
+    function sanitizeURL(urlStr) {
+      if (!urlStr || typeof urlStr !== 'string') return 'about:blank';
+      const trimmed = urlStr.trim();
+      // Only permit safe http, https, or data URLs
+      if (/^(https?:\/\/|data:image\/)/i.test(trimmed)) {
+        return escapeHTML(trimmed);
+      }
+      return 'about:blank';
+    }
+
+    // Validates YouTube / Vimeo embed URLs specifically
+    function sanitizeEmbedURL(urlStr) {
+      if (!urlStr || typeof urlStr !== 'string') return 'about:blank';
+      const trimmed = urlStr.trim();
+      if (/^https:\/\/(www\.)?(youtube\.com\/embed\/|player\.vimeo\.com\/video\/)/i.test(trimmed)) {
+        return escapeHTML(trimmed);
+      }
+      return 'about:blank';
+    }
+
+    // Initial Preloaded Archive Sample Data for Insomnio Film
+    const initialInsomnioData = [
+      {
+        id: 'INS-001',
+        title: 'CORTOMETRAJE: "SOMBRAS EN LA BRUMA"',
+        category: 'cortos',
+        type: 'video',
+        url: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
+        poster: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=1200&q=80',
+        tags: ['CORTOMETRAJE', 'NOCTURNO', '35MM', 'INSOMNIO_FILM'],
+        description: 'Cortometraje experimental rodado en negativo monocromático. Exploración de la soledad urbana y atmósferas de penumbra nocturna.',
+        date: '2025-11-12'
+      },
+      {
+        id: 'BLK-002',
+        title: 'BEAT TAPE: "NOCTURNO NO. 1 - BLACK LIST"',
+        category: 'musica',
+        type: 'audio',
+        url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3',
+        poster: 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&w=1200&q=80',
+        tags: ['BEAT', 'BLACK_LIST', 'DARK_TRAP', 'AMBIENT'],
+        description: 'Pista de sonido experimental producida bajo el sello Black List. Texturas industriales y graves distorsionados.',
+        date: '2025-10-04'
+      },
+      {
+        id: 'INS-003',
+        title: 'FOTOGRAFÍA: "CATEDRAL EN PENUMBRAS"',
+        category: 'fotos',
+        type: 'image',
+        url: 'https://images.unsplash.com/photo-1514565131-fce0801e5785?auto=format&fit=crop&w=1200&q=80',
+        poster: 'https://images.unsplash.com/photo-1514565131-fce0801e5785?auto=format&fit=crop&w=1200&q=80',
+        tags: ['FOTOGRAFÍA', 'GÓTICO', 'ESTRUCTURA', 'MONOCROMO'],
+        description: 'Registro fotográfico de arquitectura gótica y claroscuro en formato analógico de gran formato.',
+        date: '2026-01-20'
+      },
+      {
+        id: 'INS-004',
+        title: 'PREVIEW: "PROYECTO INSOMNIO EN DESARROLLO"',
+        category: 'previews',
+        type: 'video',
+        url: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
+        poster: 'https://images.unsplash.com/photo-1509631179647-0177331693ae?auto=format&fit=crop&w=1200&q=80',
+        tags: ['PREVIEW', 'TEASER', 'PRÓXIMAMENTE'],
+        description: 'Adelanto exclusivo del próximo largometraje en producción por Insomnio Film.',
+        date: '2026-02-15'
+      },
+      {
+        id: 'INS-005',
+        title: 'ARCHIVO: "MANIFESTO CONCEPTUAL & STORYBOARD"',
+        category: 'archivos',
+        type: 'image',
+        url: 'https://images.unsplash.com/photo-1539109136881-3be0616acf4b?auto=format&fit=crop&w=1200&q=80',
+        poster: 'https://images.unsplash.com/photo-1539109136881-3be0616acf4b?auto=format&fit=crop&w=1200&q=80',
+        tags: ['STORYBOARD', 'DOCUMENTO', 'CONCEPTO'],
+        description: 'Documentación visual e ilustraciones preparatorias para el vestuario y ambientación del rodaje.',
+        date: '2025-08-30'
+      }
+    ];
+
+    // Safe retrieve with validation against Stored XSS
+    function getArchiveData() {
+      try {
+        const stored = localStorage.getItem('insomnio_film_archive');
+        if (!stored) {
+          localStorage.setItem('insomnio_film_archive', JSON.stringify(initialInsomnioData));
+          return initialInsomnioData;
+        }
+        const parsed = JSON.parse(stored);
+        if (!Array.isArray(parsed)) return initialInsomnioData;
+
+        // Sanitize stored objects
+        return parsed.map(item => ({
+          id: escapeHTML(item.id || 'INS-000'),
+          title: escapeHTML(item.title || 'SIN TÍTULO'),
+          category: escapeHTML(item.category || 'archivos'),
+          type: escapeHTML(item.type || 'image'),
+          url: sanitizeURL(item.url),
+          poster: sanitizeURL(item.poster || 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=800'),
+          tags: Array.isArray(item.tags) ? item.tags.map(t => escapeHTML(t)) : ['INSOMNIO'],
+          description: escapeHTML(item.description || ''),
+          date: escapeHTML(item.date || '2026-01-01')
+        }));
+      } catch (err) {
+        console.error('Archive integrity check failed:', err);
+        return initialInsomnioData;
+      }
+    }
+
+    let currentFilter = 'all';
+    let searchQuery = '';
+
+    document.addEventListener('DOMContentLoaded', () => {
+      lucide.createIcons();
+      renderGallery();
+      updateStats();
+      setupAudioListeners();
+    });
+
+    function renderGallery() {
+      const grid = document.getElementById('mediaGrid');
+      const emptyState = document.getElementById('emptyState');
+      const data = getArchiveData();
+
+      const filtered = data.filter(item => {
+        const matchesCategory = currentFilter === 'all' || item.category === currentFilter;
+        const searchLower = searchQuery.toLowerCase();
+        const matchesSearch = !searchQuery || 
+          item.title.toLowerCase().includes(searchLower) ||
+          item.description.toLowerCase().includes(searchLower) ||
+          item.tags.some(tag => tag.toLowerCase().includes(searchLower));
+
+        return matchesCategory && matchesSearch;
+      });
+
+      if (filtered.length === 0) {
+        grid.innerHTML = '';
+        emptyState.classList.remove('hidden');
+        return;
+      }
+
+      emptyState.classList.add('hidden');
+      grid.innerHTML = filtered.map(item => createCardHTML(item)).join('');
+      lucide.createIcons();
+    }
+
+    function createCardHTML(item) {
+      const categoryBadges = {
+        cortos: '[CORTOS]',
+        musica: '[MÚSICA]',
+        fotos: '[FOTOS]',
+        archivos: '[ARCHIVOS]',
+        previews: '[PREVIEW]'
+      };
+
+      const safeTitle = escapeHTML(item.title);
+      const safeDesc = escapeHTML(item.description);
+      const safeId = escapeHTML(item.id);
+      const safePoster = sanitizeURL(item.poster);
+      const safeCat = categoryBadges[item.category] || '[PIEZA]';
+
+      return `
+        <div class="gothic-frame group flex flex-col justify-between font-mono relative overflow-hidden">
+          <!-- Card Top Bar -->
+          <div class="px-3 py-2 flex items-center justify-between text-[10px] text-insomnio-silver border-b border-insomnio-border bg-insomnio-ash">
+            <span class="tracking-widest text-insomnio-crimson font-bold">${safeId}</span>
+            <span class="text-insomnio-bone font-cinzel font-bold">${safeCat}</span>
+          </div>
+
+          <!-- Media Preview Box -->
+          <div class="relative aspect-[4/5] bg-insomnio-void overflow-hidden cursor-pointer" onclick="openDetailModal('${safeId}')">
+            <img src="${safePoster}" alt="${safeTitle}" 
+              class="w-full h-full object-cover grayscale contrast-125 group-hover:scale-105 group-hover:grayscale-0 transition duration-700 opacity-80 group-hover:opacity-100"
+              onerror="this.src='https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=800'">
+            
+            <div class="absolute inset-0 crimson-vignette flex flex-col justify-end p-4 opacity-90 group-hover:opacity-100 transition">
+              <span class="text-[9px] text-insomnio-silver uppercase tracking-widest">${escapeHTML(item.date)}</span>
+              <h3 class="font-cinzel text-lg text-insomnio-bone font-bold uppercase leading-tight line-clamp-2 mt-1">${safeTitle}</h3>
+            </div>
+
+            <!-- Hover Badge -->
+            <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition bg-insomnio-void/70 backdrop-blur-xs">
+              <div class="px-4 py-2 border border-insomnio-crimson text-insomnio-bone text-xs uppercase tracking-widest font-bold bg-insomnio-void flex items-center gap-2">
+                ${item.type === 'audio' ? '<i data-lucide="play" class="w-4 h-4 fill-current text-insomnio-crimson"></i> [REPRODUCIR_AUDIO]' : '<i data-lucide="eye" class="w-4 h-4 text-insomnio-crimson"></i> [INSPECCIONAR_OBRA]'}
+              </div>
+            </div>
+          </div>
+
+          <!-- Card Description and Actions -->
+          <div class="p-3 bg-insomnio-ash border-t border-insomnio-border space-y-2">
+            <p class="text-insomnio-parchment text-[11px] line-clamp-2 leading-relaxed">${safeDesc}</p>
+            
+            <div class="flex items-center justify-between text-[9px] pt-2 border-t border-insomnio-border/50 text-insomnio-silver">
+              <div class="flex flex-wrap gap-1">
+                ${item.tags.map(t => `<span class="bg-insomnio-void px-1.5 py-0.5 border border-insomnio-border text-insomnio-parchment">#${escapeHTML(t)}</span>`).join('')}
+              </div>
+              <button onclick="event.stopPropagation(); deleteEntry('${safeId}')" class="hover:text-insomnio-crimson transition">[ ELIMINAR ]</button>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function filterCategory(cat) {
+      currentFilter = escapeHTML(cat);
+      document.querySelectorAll('.cat-btn').forEach(btn => {
+        btn.classList.remove('bg-insomnio-bone', 'text-insomnio-void');
+        btn.classList.add('bg-insomnio-ash', 'text-insomnio-parchment');
+      });
+
+      const activeBtn = document.getElementById(`btn-cat-${currentFilter}`);
+      if (activeBtn) {
+        activeBtn.classList.remove('bg-insomnio-ash', 'text-insomnio-parchment');
+        activeBtn.classList.add('bg-insomnio-bone', 'text-insomnio-void');
+      }
+
+      renderGallery();
+    }
+
+    function handleSearch() {
+      const input = document.getElementById('searchInput');
+      searchQuery = input.value.trim();
+      renderGallery();
+    }
+
+    function setSearchTag(tag) {
+      const safeTag = escapeHTML(tag);
+      document.getElementById('searchInput').value = safeTag;
+      searchQuery = safeTag;
+      renderGallery();
+    }
+
+    function resetFilters() {
+      searchQuery = '';
+      document.getElementById('searchInput').value = '';
+      filterCategory('all');
+    }
+
+    function updateStats() {
+      const data = getArchiveData();
+      document.getElementById('stat-total').innerText = data.length < 10 ? '0' + data.length : data.length;
+      const audioCount = data.filter(d => d.category === 'musica').length;
+      const visualCount = data.filter(d => d.category !== 'musica').length;
+      document.getElementById('stat-audio').innerText = audioCount < 10 ? '0' + audioCount : audioCount;
+      document.getElementById('stat-visual').innerText = visualCount < 10 ? '0' + visualCount : visualCount;
+    }
+
+    function playTrack(item) {
+      if (!item || !item.url) return;
+      currentPlayingItem = item;
+      audioInstance.src = sanitizeURL(item.url);
+      audioInstance.play().catch(e => console.warn('Audio play restricted by browser policy:', e));
+      isPlaying = true;
+
+      document.getElementById('playerTitle').innerText = item.title;
+      document.getElementById('playerArtist').innerText = item.tags.join(' // ') || 'INSOMNIO FILM ARCHIVE';
+      document.getElementById('audioPlayerBar').classList.remove('translate-y-full');
+      document.getElementById('eqContainer').classList.add('playing');
+      updatePlayIcon();
+    }
+
+    function togglePlay() {
+      if (!audioInstance.src) return;
+      if (isPlaying) {
+        audioInstance.pause();
+        isPlaying = false;
+        document.getElementById('eqContainer').classList.remove('playing');
+      } else {
+        audioInstance.play().catch(e => console.warn('Audio play error:', e));
+        isPlaying = true;
+        document.getElementById('eqContainer').classList.add('playing');
+      }
+      updatePlayIcon();
+    }
+
+    function updatePlayIcon() {
+      document.getElementById('playBtnText').innerText = isPlaying ? 'PAUSAR' : 'REPRODUCIR';
+    }
+
+    function setupAudioListeners() {
+      const slider = document.getElementById('seekSlider');
+      
+      audioInstance.addEventListener('timeupdate', () => {
+        if (audioInstance.duration) {
+          const pct = (audioInstance.currentTime / audioInstance.duration) * 100;
+          slider.value = pct;
+          document.getElementById('currentTime').innerText = formatTime(audioInstance.currentTime);
+          document.getElementById('durationTime').innerText = formatTime(audioInstance.duration);
+        }
+      });
+
+      audioInstance.addEventListener('ended', () => {
+        isPlaying = false;
+        document.getElementById('eqContainer').classList.remove('playing');
+        updatePlayIcon();
+      });
+    }
+
+    function seekAudio() {
+      const slider = document.getElementById('seekSlider');
+      if (audioInstance.duration) {
+        audioInstance.currentTime = (slider.value / 100) * audioInstance.duration;
+      }
+    }
+
+    function adjustVolume() {
+      const vol = document.getElementById('volumeSlider').value;
+      audioInstance.volume = Math.max(0, Math.min(1, parseFloat(vol)));
+    }
+
+    function closePlayer() {
+      audioInstance.pause();
+      isPlaying = false;
+      document.getElementById('eqContainer').classList.remove('playing');
+      document.getElementById('audioPlayerBar').classList.add('translate-y-full');
+    }
+
+    function formatTime(secs) {
+      if (isNaN(secs)) return '00:00';
+      const m = Math.floor(secs / 60);
+      const s = Math.floor(secs % 60);
+      return `${m < 10 ? '0' : ''}${m}:${s < 10 ? '0' : ''}${s}`;
+    }
+
+    function openDetailModal(id) {
+      const data = getArchiveData();
+      const item = data.find(d => d.id === id);
+      if (!item) return;
+
+      const modal = document.getElementById('detailModal');
+      const content = document.getElementById('modalContent');
+
+      let mediaDisplay = '';
+      if (item.type === 'image') {
+        const safeImg = sanitizeURL(item.url);
+        mediaDisplay = `<img src="${safeImg}" class="w-full max-h-[65vh] object-contain bg-insomnio-void border border-insomnio-border" onerror="this.src='https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=800'">`;
+      } else if (item.type === 'video') {
+        const safeEmbed = sanitizeEmbedURL(item.url);
+        mediaDisplay = `
+          <div class="relative w-full aspect-video bg-insomnio-void overflow-hidden border border-insomnio-border">
+            <iframe src="${safeEmbed}" class="w-full h-full" frameborder="0" allowfullscreen sandbox="allow-scripts allow-same-origin allow-popups"></iframe>
+          </div>
+        `;
+      } else if (item.type === 'audio') {
+        const itemJSON = JSON.stringify(item).replace(/"/g, '&quot;');
+        mediaDisplay = `
+          <div class="bg-insomnio-void p-8 border border-insomnio-border text-center space-y-4">
+            <button onclick="playTrack(${itemJSON})" class="px-6 py-3 bg-insomnio-crimson text-insomnio-bone font-bold text-xs uppercase tracking-widest hover:bg-insomnio-blood transition flex items-center justify-center gap-2 mx-auto">
+              <i data-lucide="play" class="w-4 h-4 fill-current"></i> [CARGAR_EN_SISTEMA_DE_SONIDO]
+            </button>
+            <p class="text-[10px] text-insomnio-silver">// FUENTE DE AUDIO: ${escapeHTML(item.url)}</p>
+          </div>
+        `;
+      }
+
+      content.innerHTML = `
+        <div class="space-y-4">
+          <div class="flex items-center justify-between border-b border-insomnio-border pb-2">
+            <h2 class="font-cinzel text-xl text-insomnio-bone font-bold uppercase">${escapeHTML(item.title)}</h2>
+            <span class="text-[10px] px-2 py-1 bg-insomnio-ash border border-insomnio-crimson text-insomnio-bone">${escapeHTML(item.category.toUpperCase())}</span>
+          </div>
+
+          <div>${mediaDisplay}</div>
+
+          <div class="space-y-2 pt-2">
+            <h4 class="text-[10px] text-insomnio-silver uppercase tracking-widest">// DETALLES_DE_PRODUCCIÓN:</h4>
+            <p class="text-xs text-insomnio-parchment leading-relaxed bg-insomnio-void p-4 border border-insomnio-border">${escapeHTML(item.description)}</p>
+          </div>
+
+          <div class="flex flex-wrap gap-1.5 pt-2">
+            ${item.tags.map(t => `<span class="text-[10px] bg-insomnio-ash px-2 py-1 border border-insomnio-border text-insomnio-bone">#${escapeHTML(t)}</span>`).join('')}
+          </div>
+        </div>
+      `;
+
+      modal.classList.remove('hidden');
+      lucide.createIcons();
+    }
+
+    function closeDetailModal() {
+      document.getElementById('detailModal').classList.add('hidden');
+    }
+
+    function openUploadModal() {
+      document.getElementById('uploadModal').classList.remove('hidden');
+    }
+
+    function closeUploadModal() {
+      document.getElementById('uploadModal').classList.add('hidden');
+    }
+
+    function saveMediaEntry(e) {
+      e.preventDefault();
+
+      const rawTitle = document.getElementById('inputTitle').value;
+      const rawCategory = document.getElementById('inputCategory').value;
+      const rawType = document.getElementById('inputType').value;
+      const rawUrl = document.getElementById('inputUrl').value;
+      const rawTags = document.getElementById('inputTags').value;
+      const rawDesc = document.getElementById('inputDesc').value;
+
+      // Sanitize inputs
+      const title = escapeHTML(rawTitle.slice(0, 100));
+      const category = escapeHTML(rawCategory);
+      const type = escapeHTML(rawType);
+      const url = sanitizeURL(rawUrl);
+      const description = escapeHTML(rawDesc.slice(0, 1000)) || 'SIN NOTAS ADICIONALES DE PRODUCCIÓN.';
+
+      const parsedTags = rawTags ? rawTags.split(',').map(t => escapeHTML(t.trim().toUpperCase())).filter(Boolean) : ['INSOMNIO_OBRA'];
+
+      const prefix = category === 'musica' ? 'BLK-' : 'INS-';
+      const newEntry = {
+        id: prefix + Math.floor(Math.random() * 900 + 100),
+        title,
+        category,
+        type,
+        url,
+        poster: type === 'image' ? url : 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=800',
+        tags: parsedTags,
+        description,
+        date: new Date().toISOString().split('T')[0]
+      };
+
+      const currentData = getArchiveData();
+      currentData.unshift(newEntry);
+      
+      try {
+        localStorage.setItem('insomnio_film_archive', JSON.stringify(currentData));
+      } catch (err) {
+        console.error('Storage quota exceeded:', err);
+      }
+
+      document.getElementById('uploadForm').reset();
+      closeUploadModal();
+      renderGallery();
+      updateStats();
+    }
+
+    function deleteEntry(id) {
+      const safeId = escapeHTML(id);
+      let currentData = getArchiveData();
+      currentData = currentData.filter(item => item.id !== safeId);
+      localStorage.setItem('insomnio_film_archive', JSON.stringify(currentData));
+      renderGallery();
+      updateStats();
+    }
+  </script>
+</body>
+</html>
